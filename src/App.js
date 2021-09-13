@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { withAuth0 } from '@auth0/auth0-react';
 import Header from './Header';
 import IsLoadingAndError from './IsLoadingAndError';
@@ -13,7 +14,6 @@ import BestBooks from './BestBooks'
 import Login from './Login'
 import Profile from './components/profile';
 import './App.css';
-
 class App extends Component {
 
 
@@ -29,7 +29,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/">
                 {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
-                {isAuthenticated ? <BestBooks/> : <Login/>}
+                {isAuthenticated ? <BestBooks email={user.email}/> : <Login/>}
               </Route>
               {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
               {isAuthenticated && <Profile name={user.name} pfp={user.picture} email={user.email}/>}
