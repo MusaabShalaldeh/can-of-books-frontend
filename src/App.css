@@ -4,13 +4,30 @@
 }
 
 
-#footer {
+/* #footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+  } */
+
+  #booksRow{
+    justify-content: space-between;
+    margin: auto 25px;
   }
 
   #carosuelContainer{
       margin: auto;
       width: 40%;
+  }
+
+  #formModalContainer{
+      margin: 15px;
+  }
+
+  #removeButton{
+    background-color: #dd4227 !important;
+  }
+
+  #bookText{
+      color:black;
   }
