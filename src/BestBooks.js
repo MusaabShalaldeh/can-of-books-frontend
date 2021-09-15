@@ -7,6 +7,7 @@ import axios from "axios";
 import AddButton from "./components/AddButton";
 import {Row} from 'react-bootstrap';
 import ModalForm from "./components/ModalForm";
+import UpdateModalForm from "./components/UpdateModalForm";
 import BookItem from "./components/BookItem";
 
 class MyFavoriteBooks extends React.Component {
@@ -16,6 +17,12 @@ class MyFavoriteBooks extends React.Component {
     this.state = {
       booksArr: [],
       show: false,
+      showUpdate: false,
+      id: '',
+      titleHolder: 't',
+      descHolder: 'tt',
+      statusHolder: "Can't Live Without it",
+      email: ''
     };
   }
 
@@ -70,6 +77,45 @@ class MyFavoriteBooks extends React.Component {
       show: true,
     });
   };
+  closeUpdateModal = () => {
+    this.setState({
+      showUpdate: false,
+    });
+  };
+  openUpdateModal = (obj) => {
+    this.setState({
+      showUpdate: true,
+      id: obj.id,
+      titleHolder: obj.title,
+      descHolder: obj.description,
+      statusHolder: obj.status,
+      email: obj.email
+    });
+  };
+  submitUpdateForm=(event)=>{
+    event.preventDefault();
+    //  const url = `http://localhost:3001/updateBook/${this.state.id}?email=${this.state.email}`;
+    const url = `https://ms-can-of-books-backend.herokuapp.com/updateBook/${this.state.id}?email=${this.state.email}`;
+    const obj={
+      title: event.target.bookName.value,
+      description: event.target.bookdescription.value,
+      status: event.target.selectStatus.value
+    }
+    axios
+      .put(url, obj)
+      .then((result) => {
+        this.setState({
+          booksArr: result.data,
+        });
+      })
+      .catch((err) => {
+        console.log("an error was found when attempting to delete this book");
+      });
+
+    this.setState({
+      showUpdate: false
+    })
+  }
   componentDidMount = () => {
     // const url = `http://localhost:3001/books?email=${this.props.email}`;
     const url = `https://ms-can-of-books-backend.herokuapp.com/books?email=${this.props.email}`;
@@ -96,6 +142,14 @@ class MyFavoriteBooks extends React.Component {
           handleClose={this.closeModal}
           submitForm={this.submitForm}
         />
+        <UpdateModalForm 
+        showUpdate={this.state.showUpdate} 
+        closeUpdateModal={this.closeUpdateModal}
+        nameHolder={this.state.titleHolder}
+        descHolder={this.state.descHolder}
+        statusHolder={this.state.statusHolder}
+        submitUpdateForm={this.submitUpdateForm}
+        />
         <Jumbotron>
           <h1>My Favorite Books</h1>
           <p>This is a collection of my favorite books</p>
@@ -108,8 +162,9 @@ class MyFavoriteBooks extends React.Component {
                     title={item.title}
                     description={item.description}
                     status={item.status}
-                    id={item._id}
+                    item={item}
                     deleteBook={this.deleteBook}
+                    openUpdateModal={this.openUpdateModal}
                   />
                 );
               })}
